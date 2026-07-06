@@ -55,6 +55,66 @@ app.post('/addStudent', (req, res) => {
     });
 });
 
+app.get('/editStudent/:id', (req, res) => {
+    const studentId = req.params.id;
+
+    const sql = 'SELECT * FROM student WHERE studentId = ?';
+
+    connection.query(sql, [studentId], (error, results) => {
+        if (error) {
+            console.error("Error retrieving student:", error);
+            res.send('Error retrieving student');
+        } else {
+            res.render('editStudent', {
+                student: results[0]
+            });
+        }
+    });
+});
+
+app.post('/editStudent/:id', (req, res) => {
+    const studentId = req.params.id;
+    const { name, dob, contact, image } = req.body;
+
+    const sql = `
+        UPDATE student
+        SET name = ?, dob = ?, contact = ?, image = ?
+        WHERE studentId = ?
+    `;
+
+    connection.query(sql,
+        [name, dob, contact, image, studentId],
+        (error, results) => {
+
+        if (error) {
+            console.error("Error updating student:", error);
+            res.send('Error updating student');
+        } else {
+            res.redirect('/');
+        }
+    });
+});
+
+
+
+app.get('/deleteStudent/:id', (req, res) => {
+    const studentId = req.params.id;
+
+    const sql = 'DELETE FROM student WHERE studentId = ?';
+
+    connection.query(sql, [studentId], (error, results) => {
+        if (error) {
+            console.error("Error deleting student:", error);
+            res.send('Error deleting student');
+        } else {
+            res.redirect('/');
+        }
+    });
+});
+
+
+
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port http://localhost:${PORT}`);
