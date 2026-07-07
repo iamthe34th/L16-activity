@@ -12,7 +12,6 @@
 
 <body>
 
-  <!-- Navigation Bar -->
   <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">Student List App</a>
@@ -27,7 +26,6 @@
     </div>
   </nav>
 
-  <!-- Update Student Form -->
   <div class="container mt-5">
 
     <div class="row justify-content-center">
@@ -44,7 +42,7 @@
 
           <div class="card-body">
 
-            <form action="/editStudent/<%= student.studentId %>" method="POST">
+            <form action="/editStudent/<%= student.studentId %>" method="POST" enctype="multipart/form-data">
 
               <div class="mb-3">
                 <label for="name" class="form-label">Student Name</label>
@@ -76,24 +74,30 @@
                        required>
               </div>
 
-              <div class="mb-3">
-                <label for="image" class="form-label">Image URL</label>
-                <input type="text"
-                       class="form-control"
-                       id="image"
-                       name="image"
-                       value="<%= student.image %>"
-                       required>
-              </div>
+              <input type="hidden" name="currentImage" value="<%= student.image %>">
 
               <div class="mb-3">
                 <label class="form-label">Current Image</label>
+
                 <div class="text-center">
-                  <img src="<%= student.image %>"
-                       alt="<%= student.name %>"
-                       class="img-fluid rounded border"
-                       style="max-height:200px;">
+                  <% if (student.image) { %>
+                    <img src="/images/<%= student.image %>"
+                         alt="<%= student.name %>"
+                         class="img-fluid rounded border"
+                         style="max-height:200px;">
+                  <% } else { %>
+                    <p>No image uploaded</p>
+                  <% } %>
                 </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="image" class="form-label">New Image</label>
+                <input type="file"
+                       class="form-control"
+                       id="image"
+                       name="image"
+                       accept="image/*">
               </div>
 
               <div class="d-grid gap-2">
